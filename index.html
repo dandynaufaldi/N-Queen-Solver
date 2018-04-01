@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<style type="text/css">
+		.container{
+		}
+
+		#form-container{
+			box-sizing: border-box;
+			width: 30%;
+			height: 50%;
+			margin-left: 35%;
+			margin-top: 20%;
+		}
+
+		.inputan{
+			width: 29%;
+			float: right;
+			margin: 0;
+		}
+
+		#input-select{
+			width: 30%;
+		}
+
+		#input-submit{
+			margin-top: 10%;
+			margin-left: : 30.5%;
+		}
+	</style>
+</head>
+<body>
+	<div class="container" id="form-container">
+		<form action="" method="GET" id="form-content">
+			<label for="queens">Input N</label>
+			<input class="inputan" id="input-n" type="text" name="queens" placeholder="">
+			<br><br>
+			<label for="option">Mode peletakkan queen</label>
+			<select id="input-select" class="inputan" name="option">
+				<option value="random">
+					Random
+				</option>
+				<option value="manual">
+					Manual
+				</option>
+			</select>
+			<button class="inputan" id="input-submit" onclick="getinput()">Submit</button>
+		</form>
+	</div>
+	<div class="container" id="button-container">
+		
+	</div>
+
+	<script type="text/javascript">
+
+		function getinput(){
+			var n;
+			var option;
+			n=document.getElementById("input-n").value;
+			n=parseInt(n);
+			option=document.getElementById("input-select").value;
+			//document.getElementById("form-content").style.display="none"; //what the?? why wont work?
+			var button="<button>'X'</button>";
+			for (var i = 0; i < n; i++) {
+				alert("eh");
+			}
+		}
+	</script>
+</body>
+</html>
