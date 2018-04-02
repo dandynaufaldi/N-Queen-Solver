@@ -6,6 +6,10 @@
 		.container{
 		}
 
+		.container-gone{
+			display:none;
+		}
+
 		#form-container{
 			box-sizing: border-box;
 			width: 30%;
@@ -28,10 +32,23 @@
 			margin-top: 10%;
 			margin-left: : 30.5%;
 		}
+
+		.main-object{
+			width: 10%;
+			margin: 0;
+		}
+
+		#button-container{
+			background-color: grey;
+			width: 10px;
+			margin-left: 10px;
+			margin: 0;
+		}
 	</style>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 </head>
 <body>
-	<div class="container" id="form-container">
+	<div class="container" id="form-container" style="display: block;">
 		<form action="" method="GET" id="form-content">
 			<label for="queens">Input N</label>
 			<input class="inputan" id="input-n" type="text" name="queens" placeholder="">
@@ -53,18 +70,47 @@
 	</div>
 
 	<script type="text/javascript">
+		$('#form-container').submit(function() {
+			$(this).css("display","none");
+			return false;
+		});
+
+		function getmyidname(mine){
+			alert($(mine).attr('id'));
+		}
 
 		function getinput(){
 			var n;
 			var option;
 			n=document.getElementById("input-n").value;
 			n=parseInt(n);
-			option=document.getElementById("input-select").value;
-			//document.getElementById("form-content").style.display="none"; //what the?? why wont work?
-			var button="<button>'X'</button>";
+			
 			for (var i = 0; i < n; i++) {
-				alert("eh");
+				for (var j =0 ; j< n ; ++j){
+					var id="'"+i+j+"'";
+					var button="<button class='main-object' id="+id+" onclick='getmyidname(this)'>X</button>";
+					console.log(button);
+					$("#button-container").append(button);
+				}
 			}
+
+			var win_height=($(window).height())-20;
+			var win_width=($(window).width())-20;
+			var win_margin=0;
+			if (win_height>=win_width){
+				win_margin=(win_height-win_width)/2;
+				win_height=win_width;
+			}
+			else{
+				win_margin=(win_width-win_height)/2;
+				win_height=win_height;
+			}
+			var obj_size=win_height/n;
+			$("#button-container").css("width",win_height);
+			$("#button-container").css("height",win_height);
+			$("#button-container").css("margin-left",win_margin);
+			$(".main-object").css("width",obj_size);
+			$(".main-object").css("height",obj_size);
 		}
 	</script>
 </body>
