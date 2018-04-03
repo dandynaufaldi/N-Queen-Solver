@@ -48,13 +48,8 @@
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 </head>
 <body>
-<<<<<<< Updated upstream
 	<div class="container" id="form-container" style="display: block;">
 		<form action="" method="GET" id="form-content">
-=======
-	<div class="container" id="form-container">
-		<form action="" id="form-content">
->>>>>>> Stashed changes
 			<label for="queens">Input N</label>
 			<input class="inputan" id="input-n" type="text" name="queens" placeholder="">
 			<br><br>
@@ -87,10 +82,10 @@
 		function getinput(){
 			var n;
 			var option;
-			n=document.getElementById("input-n").value;
-			n=parseInt(n);
-<<<<<<< Updated upstream
-			
+			n = document.getElementById("input-n").value;
+			n = parseInt(n);
+			option = document.getElementById("input-select").value;
+			alert(option);
 			for (var i = 0; i < n; i++) {
 				for (var j =0 ; j< n ; ++j){
 					var id="'"+i+j+"'";
@@ -117,15 +112,6 @@
 			$("#button-container").css("margin-left",win_margin);
 			$(".main-object").css("width",obj_size);
 			$(".main-object").css("height",obj_size);
-=======
-			option=document.getElementById("input-select").value;
-			var form = document.getElementById("form-container");
-			form.style.display="None"; //what the?? why wont work?
-			// var button="<button>'X'</button>";
-			// for (var i = 0; i < n; i++) {
-			// 	alert(n);
-			// }
->>>>>>> Stashed changes
 		}
 	</script>
 </body>

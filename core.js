@@ -29,8 +29,32 @@ Method
 - ‎draw line graph*/
 
 $(document).ready(function(){
-	var chessCanvas = document.getElementById("chess-canvas");
-	var lineCanvas = document.getElementById("line-canvas");
+	var lineGraph = document.getElementById("line-canvas");
 
-	var 
+	function Petak(elem, type){
+		this.elem = elem; //getElementById per button
+		this.type = type; //queen or not
+		this.heurVal = -1; //default value
+		
+		this.draw = function(){
+			if (type == "queen"){
+				this.elem.style.background-image = url("queen.png");
+				this.elem.innerHTML="";
+			}
+			else {
+				this.elem.style.background-image = "";
+				this.elem.innerHTML= this.heurVal;
+			}
+		}
+	}
+
+	var chessBoard = {
+		mode : document.getElementById("input-select").value,
+		size : parseInt(document.getElementById("input-n").value),
+		queenArr : [],
+		boardArr : [],
+		initBoard : function(){ //asumsi mode random, belum ada terima inputan posisi queen
+			
+		}
+	}
 });
