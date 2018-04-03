@@ -43,7 +43,6 @@
 			width: 10px;
 			margin-left: 10px;
 			margin: 0;
-			/*position: absolute;*/
 		}
 	</style>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
@@ -69,6 +68,7 @@
 	<div class="container" id="button-container">
 		
 	</div>
+
 	<script type="text/javascript">
 		$('#form-container').submit(function() {
 			$(this).css("display","none");
@@ -82,38 +82,67 @@
 		function getinput(){
 			var n;
 			var option;
-			n = document.getElementById("input-n").value;
-			n = parseInt(n);
-			option = document.getElementById("input-select").value;
-			alert(option);
+			n=document.getElementById("input-n").value;
+			n=parseInt(n);
+
+			$("#button-container").children("button").remove();
 			for (var i = 0; i < n; i++) {
 				for (var j =0 ; j< n ; ++j){
 					var id="'"+i+j+"'";
 					var button="<button class='main-object' id="+id+" onclick='getmyidname(this)'>X</button>";
-					console.log(button);
 					$("#button-container").append(button);
 				}
 			}
-
-			var win_height=($(window).height())-20;
-			var win_width=($(window).width())-20;
+			var raw_height=($(window).height());
+			var raw_width=($(window).width());
+			var win_height=raw_height-20;
+			var win_width=raw_width-20;
 			var win_margin=0;
+			var flag=1;
+			
+			console.log(raw_height);			
+			console.log(raw_width);
+			console.log(win_height);			
+			console.log(win_width);
+
+
 			if (win_height>=win_width){
-				win_margin=(win_height-win_width)/2;
+				//kalau H>W
+				win_margin=100*((win_height-win_width)/2)/raw_width;
 				win_height=win_width;
 			}
 			else{
-				win_margin=(win_width-win_height)/2;
-				win_height=win_height;
+				win_margin=100*((win_width-win_height)/2/raw_width);
+				flag=0;
 			}
 			var obj_size=win_height/n;
-			$("#button-container").css("width",win_height);
+			obj_size=(obj_size/win_height)*100;
+			
+			if(flag==1){
+				win_height=(win_width/raw_height)*100;
+				win_width=(win_width/raw_width)*100;
+			}
+			else{
+				win_width=(win_height/raw_width)*100;
+				win_height=(win_height/raw_height)*100;
+			}
+
+			win_width=win_width+"%";
+			win_height=win_height+"vh";
+			win_margin=win_margin+"%";
+
+			obj_size=obj_size+"%";
+
+			$("#button-container").css("width",win_width);
 			$("#button-container").css("height",win_height);
 			$("#button-container").css("margin-left",win_margin);
 			$(".main-object").css("width",obj_size);
 			$(".main-object").css("height",obj_size);
-			$(".main-object").css("position","absolute");
 		}
+
+		window.onresize = function(event) {
+    		getinput();
+		};
 	</script>
 </body>
 </html>
