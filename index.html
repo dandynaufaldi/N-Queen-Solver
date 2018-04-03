@@ -43,6 +43,7 @@
 			width: 10px;
 			margin-left: 10px;
 			margin: 0;
+			/*position: absolute;*/
 		}
 	</style>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
@@ -68,7 +69,6 @@
 	<div class="container" id="button-container">
 		
 	</div>
-
 	<script type="text/javascript">
 		$('#form-container').submit(function() {
 			$(this).css("display","none");
@@ -112,6 +112,7 @@
 			$("#button-container").css("margin-left",win_margin);
 			$(".main-object").css("width",obj_size);
 			$(".main-object").css("height",obj_size);
+			$(".main-object").css("position","absolute");
 		}
 	</script>
 </body>
