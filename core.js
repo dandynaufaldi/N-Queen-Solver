@@ -52,16 +52,17 @@ Method
 		mode : undefined,
 		size : undefined,
 		stepCount : 1,
-		queenArr : [],	//posisi queen, 1-D arr
-		boardArr : [],	//element button
-		rawBoardArr : [],	//arr angka simpan heuristic value 1 board
-		heurHist : [],	//rekap heuristic untuk diplot
+		queenArr : undefined,	//posisi queen, 1-D arr
+		boardArr : undefined,	//element button
+		rawBoardArr : undefined,	//arr angka simpan heuristic value 1 board
+		heurHist : undefined,	//rekap heuristic untuk diplot
 		currQueen : -1,
 		heurToBeat : 1000000,
 		initBoard : function(){ //asumsi mode random, belum ada terima inputan posisi queen
 			this.mode = document.getElementById("input-select").value;
 			this.size = parseInt(document.getElementById("input-n").value);
 			//init queen position for each column
+			this.queenArr = [];
 			for (var i = 0; i < this.size; i++) {
 				let row = Math.floor(Math.random() * this.size);
 				this.queenArr.push(row);
@@ -69,6 +70,7 @@ Method
 			}
 
 			//init rawBoardArr
+			this.rawBoardArr = [];
 			for (var i = 0; i < this.size; i++) {
 				this.rawBoardArr.push([]);
 				for(var j = 0; j < this.size; j++){
@@ -78,6 +80,7 @@ Method
 			}
 
 			//load button to arr
+			this.boardArr = [];
 			for (var i = 0; i < this.size; i++) {
 				this.boardArr.push([]);
 				for (var j = 0; j < this.size; j++){
@@ -91,6 +94,10 @@ Method
 					this.boardArr[i].push(obj);
 				}
 			}
+
+			this.heurHist = [];
+			this.currQueen = -1;
+			this.heurToBeat = 1000000;
 		},
 		syncBoard : function(){
 			for (var i = 0; i < this.size; i++) {
@@ -187,10 +194,11 @@ Method
 				// 	this.syncBoard();
 				// }
 				if (!found){
-					let col_r = Math.floor(Math.random() * this.size);
-					let row_r = Math.floor(Math.random() * this.size);
-					this.heurToBeat = this.getHeuristic(this.makeMove(col_r, row_r));
-					this.queenArr[col_r] = row_r;
+					// let col_r = Math.floor(Math.random() * this.size);
+					// let row_r = Math.floor(Math.random() * this.size);
+					// this.heurToBeat = this.getHeuristic(this.makeMove(col_r, row_r));
+					// this.queenArr[col_r] = row_r;
+					this.initBoard();
 					console.log('Random move');
 				}
 				this.resetRawBoard();
