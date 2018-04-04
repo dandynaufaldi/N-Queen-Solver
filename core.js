@@ -201,6 +201,11 @@ Method
 			}
 		},
 		evaluate : function(){
+			this.stepCount++;
+			if (this.stepCount % 1000 == 0){
+				var x = confirm("Banyak step sudah mencapai "+this.stepCount+" .Tetap lanjut?");
+				if (x == false) return;
+			}
 			setTimeout(this.drawBoard(), 5000);
 			console.log(this.queenArr);
 			console.log(this.heurToBeat);
@@ -218,10 +223,12 @@ Method
 				}
 			}
 			if (minHeur == this.heurToBeat){
+				alert('Restarting');
 				this.initBoard();
 				appendlog(">Random Restart karena nilai heuristik sekarang tidak lebih kecil daripada herustik sebelumnya");
 			}
 			else{
+				resetwarna();
 				var x = this.queenArr[minCol];
 				var id = x.toString() + minCol.toString();
 				$("#"+id).css("background-color","yellow");
@@ -234,8 +241,10 @@ Method
 				x = this.queenArr[minCol];
 				id = x.toString() + minCol.toString();
 				$("#"+id).css("background-color","green");
-				if (minHeur == 0)
+				if (minHeur == 0){
 					alert('FINISH GAN');
+					appendlog("<h3>Finish dengan "+this.stepCount+" step</h3>")
+				}
 			}
 		},
 		runLoop : function(){
@@ -387,7 +396,7 @@ $( "#fastforward-btn" ).bind( "click", function() {
 	
 $( "#semua-btn" ).bind( "click", function() {
 	// alert('runboard');
-	resetwarna();
+	
 	chessBoard.run(chessBoard.size);
 });
 
