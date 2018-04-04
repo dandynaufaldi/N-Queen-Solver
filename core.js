@@ -410,8 +410,12 @@ window.onresize = function(event) {
 	chessBoard.drawBoard();
 };
 
-function appendlog(str){ //edit parameter sesuai kebutuhan mu boy
-	var p = "<p>"+str+"</p>";
+function appendlog(str){
+	var kelas='biru';
+	if (chessBoard.stepCount%2==0){
+		kelas='putih';
+	}
+	var p = "<div class='"+kelas+"'<p>"+str+"</p></div>";
 	var temp= $("#log-container").html();
 	$("#log-container").children("p").remove();
 	$("#log-container").append(p);
