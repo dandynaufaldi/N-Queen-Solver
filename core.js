@@ -34,16 +34,20 @@ Method
 	function Petak(elem, type){
 		this.elem = elem; //getElementById per button
 		this.type = type; //queen or not
-		this.heurVal = -1; //default value
+		if (type == "queen")
+			this.heurVal = -2; //default queen value
+		else this.heurVal = -1;
 		
 		this.draw = function(){
-			if (type == "queen"){
-				// this.elem.style.backgroundImage = "url('queen.png')";
-				this.elem.innerHTML=" ";
+			if (this.heurVal == -2){
+				this.elem.style.backgroundImage = "url('kuin.png')";
+				this.elem.innerHTML=".";
 			}
 			else {
-				// this.elem.style.backgroundImage = "";
-				this.elem.innerHTML= this.heurVal.toString();
+				this.elem.style.backgroundImage = "none";
+				if (this.heurVal > -1)
+					this.elem.innerHTML= this.heurVal.toString();
+				else this.elem.innerHTML=".";
 			}
 		}
 	}
@@ -58,6 +62,7 @@ Method
 		heurHist : undefined,	//rekap heuristic untuk diplot
 		currQueen : -1,
 		heurToBeat : 1000000,
+		keepRun : false,
 		initBoard : function(){ //asumsi mode random, belum ada terima inputan posisi queen
 			this.mode = document.getElementById("input-select").value;
 			this.size = parseInt(document.getElementById("input-n").value);
@@ -98,20 +103,25 @@ Method
 			this.heurHist = [];
 			this.currQueen = -1;
 			this.heurToBeat = 1000000;
+			this.keepRun = true;
+			this.drawBoard();
 		},
 		syncBoard : function(){
 			for (var i = 0; i < this.size; i++) {
 				for (var j = 0; j < this.size; j++) {
-					if (this.rawBoardArr[i][j] == -2)
+					if (this.queenArr[j] == i){
 						this.boardArr[i][j].type = "queen";
-					else this.boardArr[i][j].type = "empty";
-					this.boardArr[i][j].heurVal = -1;
-					if (this.rawBoardArr[i][j] >= -1)
-						this.boardArr[i][j].heurVal = this.rawBoardArr[i][j];
+						this.boardArr[i][j].heurVal = -2;
+					}
+					else{
+						this.boardArr[i][j].type = "empty";
+						if (this.boardArr[i][j].heurVal == -2)
+							this.boardArr[i][j].heurVal = -1;
+					}
 				}
 			}
 		},
-		resetRawBoard : function(){
+		resetRawBoard : function(){	//set rawboard -2 queen , -1 empty
 			for (var i = 0; i < this.size; i++) {
 				for (var j = 0; j < this.size; j++) {
 					if (this.queenArr[j] == i)
@@ -156,61 +166,40 @@ Method
 			return temp_board;
 		},
 		run : function(num_step){
+			console.log('run step');
 			if (this.currQueen == this.size){
 				this.evaluate();
+				this.drawBoard();
 				this.resetRawBoard();
-				this.syncBoard();
 			}
 			else{
 				var found = false;
 				if (this.currQueen == -1 )
 					this.currQueen = 0;
 				let step =  this.currQueen + num_step;
-				for (var i = this.currQueen; i < step && !found; i++) {
-					// console.log('Check on col '+i);
+				for (var i = this.currQueen; i < step && !found && i < this.size; i++) {
 					this.currQueen = i;
 					let cur_row = this.queenArr[i];
 					for (var j = 0; j < this.size && !found; j++){
 						if (j == cur_row) continue;
-						// console.log('Run row '+j);
 						var new_board = this.makeMove(i, j);
 						let heur_score = this.getHeuristic(new_board);
 						this.rawBoardArr[j][i] = heur_score;
-						// if (heur_score >=0 &&  heur_score < this.heurToBeat){
-						// 	console.log(this.rawBoardArr);
-						// 	this.queenArr[i] = j;
-						// 	this.resetRawBoard();
-						// 	this.syncBoard();
-						// 	this.currQueen = -1;
-						// 	found = true;
-						// 	this.heurToBeat = heur_score;
-						// }
+						this.boardArr[j][i].heurVal = heur_score;
+						console.log('col '+i+' row '+j+' heur '+this.boardArr[j][i].heurVal);
 					}
 				}
 				this.currQueen++;
 				if (this.currQueen == this.size){
 					this.evaluate();
+					this.drawBoard();
 					this.resetRawBoard();
 					this.syncBoard();
 				}
-				// if (!found){
-				// 	// let col_r = Math.floor(Math.random() * this.size);
-				// 	// let row_r = Math.floor(Math.random() * this.size);
-				// 	// this.heurToBeat = this.getHeuristic(this.makeMove(col_r, row_r));
-				// 	// this.queenArr[col_r] = row_r;
-				// 	this.initBoard();
-				// 	console.log('Random move');
-				// }
-				// this.resetRawBoard();
-				// this.syncBoard();
-				// this.currQueen = -1;
-				// console.log(this.heurToBeat);
-				// console.log(this.rawBoardArr);
-				// console.log(this.queenArr);
-				// this.heurHist.push(this.heurToBeat);
 			}
 		},
 		evaluate : function(){
+			setTimeout(this.drawBoard(), 5000);
 			console.log(this.queenArr);
 			console.log(this.heurToBeat);
 			console.log(this.rawBoardArr);
@@ -235,11 +224,164 @@ Method
 				this.heurToBeat = minHeur;
 				console.log('Move queen '+minCol+' heur '+minHeur);
 				this.resetRawBoard();
-				this.syncBoard();
 				this.currQueen = -1;
 				if (minHeur == 0)
 					alert('FINISH GAN');
 			}
+		},
+		runLoop : function(){
+			console.log('runLoop');
+			while(this.heurToBeat > 0 && this.keepRun){
+				this.run(this.size);
+			}
+		},
+		drawBoard : function(){
+			console.log('Draw');
+			this.syncBoard();
+			for (var i = 0; i < this.size; i++) {
+				for (var j = 0; j < this.size; j++) {
+					this.boardArr[i][j].draw();
+				}
+			}
 		}
 	}
-// });
+
+
+$('#form-container').submit(function() {
+	$(this).css("display","none");
+	getinput(0);
+	chessBoard.initBoard();
+	// alert('SUBMIT');
+	return false;	
+});
+
+function getmyidname(mine){
+	alert($(mine).attr('id'));
+
+}
+
+function getinput(flag){
+	var n;
+	var option;
+	n=document.getElementById("input-n").value;
+	n=parseInt(n);
+
+	//$("#button-container").children("button").remove();
+	if (flag==0){
+		var flag1=0;
+		for (var i = 0; i < n; i++) {
+			if (i%2==0) flag1=0;
+			else flag1=1;
+			for (var j =0 ; j< n ; ++j){
+				var id="'"+i+j+"'";
+				var button="<button class='main-object' id="+id+" onclick='getmyidname(this)'></button>";
+				$("#button-container").append(button);
+				id=i.toString() + j.toString();
+				id=id.toString();
+				if (flag1%2==0){
+					$("#"+id).css("background-color","#ffef96");
+				}
+				else{
+					$("#"+id).css("background-color","#bc5a45");
+				}
+				++flag1;
+
+			}
+		}
+	}
+	var raw_height=($(window).height());
+	var raw_width=($(window).width());
+	var win_height=raw_height-20;
+	var win_width=raw_width-20;
+	var win_margin=0;
+	var flag=1;
+
+
+	$(".btn-on-heu").css("margin-top","0");
+	if (win_height>=win_width){
+		//kalau H>W
+		win_margin=100*((win_height-win_width)/2)/raw_width;
+		win_height=win_width;
+		if ((win_width/win_height)>=0.5){
+			win_margin=100*((raw_width-win_width)/2)/raw_width;
+			$(".btn-on-heu-1").css("margin-top","3%");
+		}
+	}
+	else{
+		win_margin=100*((win_width-win_height)/2/raw_width);
+		flag=0;
+	}
+	var obj_size=win_height/n;
+	obj_size=(obj_size/win_height)*100;
+	
+	if(flag==1){
+		win_height=(win_width/raw_height)*100;
+		win_width=(win_width/raw_width)*100;
+	}
+	else{
+		win_width=(win_height/raw_width)*100;
+		win_height=(win_height/raw_height)*100;
+	}
+
+	win_width=win_width+"%";
+	win_height=win_height+"vh";
+	win_margin=win_margin+"%";
+
+	obj_size=obj_size+"%";
+
+	$("#button-container").css("width",win_width);
+	$("#button-container").css("height",win_height);
+	$("#button-container").css("margin-left","1%");
+	$("#btn-log-container").css("width",win_width);
+	$("#btn-log-container").css("height",win_height);
+	$("#btn-log-container").css("margin-left","1%");
+	$("#btn-log-container").css("display","block");
+	$(".main-object").css("width",obj_size);
+	$(".main-object").css("height",obj_size);
+}
+$( "#stop-btn" ).bind( "click", function() {
+	// alert('STOP');
+	chessBoard.keepRun = false;
+});
+
+$( "#fastforward-btn" ).bind( "click", function() {
+	// alert('runloop');
+ 	chessBoard.runLoop();
+});
+$( "#kolom-btn" ).bind( "click", function() {
+	// alert('runstep');
+	chessBoard.run(1);
+}); 
+	
+$( "#semua-btn" ).bind( "click", function() {
+	// alert('runboard');
+	chessBoard.run(chessBoard.size);
+});
+
+$( "#unlock-btn" ).bind( "click", function() {
+	// alert('unlock');
+	chessBoard.keepRun = false;
+});
+
+window.onresize = function(event) {
+	getinput(1);
+	chessBoard.drawBoard();
+};
+
+function appendlog(heuristic,top){ //edit parameter sesuai kebutuhan mu boy
+/*			var temp[1000];
+	var stack[1000];
+	var i=top;
+	var j=0;
+	while(i>=0){
+		temp[j++]=stack[i--]
+	}
+	j--;
+	stack[0]=heuristic;
+	while(j>=0){
+		stack[i++]=temp[j--];
+	}
+	for (var a=0 ; a<i ; ++a){
+		$("#log-container").append(stack[a]);
+	}*/
+}
