@@ -29,7 +29,7 @@ Method
 - ‎draw line graph*/
 
 // $(document).ready( function(){
-	var lineGraph = document.getElementById("line-canvas");
+	// var lineGraph = document.getElementById("line-canvas");
 
 	function Petak(elem, type){
 		this.elem = elem; //getElementById per button
@@ -156,12 +156,12 @@ Method
 			return temp_board;
 		},
 		run : function(num_step){
-			// if (this.currQueen == this.size){
-			// 	this.evaluate();
-			// 	this.resetRawBoard();
-			// 	this.syncBoard();
-			// }
-			// else{
+			if (this.currQueen == this.size){
+				this.evaluate();
+				this.resetRawBoard();
+				this.syncBoard();
+			}
+			else{
 				var found = false;
 				if (this.currQueen == -1 )
 					this.currQueen = 0;
@@ -176,61 +176,70 @@ Method
 						var new_board = this.makeMove(i, j);
 						let heur_score = this.getHeuristic(new_board);
 						this.rawBoardArr[j][i] = heur_score;
-						if (heur_score >=0 &&  heur_score < this.heurToBeat){
-							console.log(this.rawBoardArr);
-							this.queenArr[i] = j;
-							this.resetRawBoard();
-							this.syncBoard();
-							this.currQueen = -1;
-							found = true;
-							this.heurToBeat = heur_score;
-						}
+						// if (heur_score >=0 &&  heur_score < this.heurToBeat){
+						// 	console.log(this.rawBoardArr);
+						// 	this.queenArr[i] = j;
+						// 	this.resetRawBoard();
+						// 	this.syncBoard();
+						// 	this.currQueen = -1;
+						// 	found = true;
+						// 	this.heurToBeat = heur_score;
+						// }
 					}
 				}
-				// this.currQueen++;
-				// if (this.currQueen == this.size){
-				// 	this.evaluate();
-				// 	this.resetRawBoard();
-				// 	this.syncBoard();
-				// }
-				if (!found){
-					// let col_r = Math.floor(Math.random() * this.size);
-					// let row_r = Math.floor(Math.random() * this.size);
-					// this.heurToBeat = this.getHeuristic(this.makeMove(col_r, row_r));
-					// this.queenArr[col_r] = row_r;
-					this.initBoard();
-					console.log('Random move');
+				this.currQueen++;
+				if (this.currQueen == this.size){
+					this.evaluate();
+					this.resetRawBoard();
+					this.syncBoard();
 				}
+				// if (!found){
+				// 	// let col_r = Math.floor(Math.random() * this.size);
+				// 	// let row_r = Math.floor(Math.random() * this.size);
+				// 	// this.heurToBeat = this.getHeuristic(this.makeMove(col_r, row_r));
+				// 	// this.queenArr[col_r] = row_r;
+				// 	this.initBoard();
+				// 	console.log('Random move');
+				// }
+				// this.resetRawBoard();
+				// this.syncBoard();
+				// this.currQueen = -1;
+				// console.log(this.heurToBeat);
+				// console.log(this.rawBoardArr);
+				// console.log(this.queenArr);
+				// this.heurHist.push(this.heurToBeat);
+			}
+		},
+		evaluate : function(){
+			console.log(this.queenArr);
+			console.log(this.heurToBeat);
+			console.log(this.rawBoardArr);
+			let minRow = -1;
+			let minCol = -1;
+			let minHeur = 1000000;
+			for (var i = 0; i < this.size; i++) {
+				for (var j = 0; j < this.size; j++) {
+					if (this.queenArr[j] != i && this.rawBoardArr[i][j] < minHeur){
+						minRow = i;
+						minCol = j;
+						minHeur = this.rawBoardArr[i][j];
+					}
+				}
+			}
+			if (minHeur == this.heurToBeat){
+				this.initBoard();
+				console.log('Random move');
+			}
+			else{
+				this.queenArr[minCol] = minRow;
+				this.heurToBeat = minHeur;
+				console.log('Move queen '+minCol+' heur '+minHeur);
 				this.resetRawBoard();
 				this.syncBoard();
 				this.currQueen = -1;
-				console.log(this.heurToBeat);
-				// console.log(this.rawBoardArr);
-				console.log(this.queenArr);
-				this.heurHist.push(this.heurToBeat);
-			// }
-		},
-		evaluate : function(){
-			// let minRow = -1;
-			// let minCol = -1;
-			// let minHeur = 1000000;
-			// for (var i = 0; i < this.size; i++) {
-			// 	for (var j = 0; j < this.size; j++) {
-			// 		if (this.queenArr[j] != i && this.rawBoardArr[i][j] < minHeur){
-			// 			minRow = i;
-			// 			minCol = j;
-			// 			minHeur = this.rawBoardArr[i][j];
-			// 		}
-			// 	}
-			// }
-			// this.queenArr[minCol] = minRow;
-			// console.log('Move queen '+minCol+' heur '+minHeur);
-			this.resetRawBoard();
-			this.syncBoard();
-			this.currQueen = -1;
-			if (minHeur == 0)
-				alert('FINISH GAN');
+				if (minHeur == 0)
+					alert('FINISH GAN');
+			}
 		}
-
 	}
 // });
