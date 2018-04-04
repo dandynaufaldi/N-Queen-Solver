@@ -166,35 +166,37 @@ Method
 			return temp_board;
 		},
 		run : function(num_step){
-			console.log('run step');
-			if (this.currQueen == this.size){
-				this.evaluate();
-				this.drawBoard();
-				this.resetRawBoard();
-			}
-			else{
-				var found = false;
-				if (this.currQueen == -1 )
-					this.currQueen = 0;
-				let step =  this.currQueen + num_step;
-				for (var i = this.currQueen; i < step && !found && i < this.size; i++) {
-					this.currQueen = i;
-					let cur_row = this.queenArr[i];
-					for (var j = 0; j < this.size && !found; j++){
-						if (j == cur_row) continue;
-						var new_board = this.makeMove(i, j);
-						let heur_score = this.getHeuristic(new_board);
-						this.rawBoardArr[j][i] = heur_score;
-						this.boardArr[j][i].heurVal = heur_score;
-						console.log('col '+i+' row '+j+' heur '+this.boardArr[j][i].heurVal);
-					}
-				}
-				this.currQueen++;
+			if (this.heurToBeat > 0){
+				console.log('run step');
 				if (this.currQueen == this.size){
 					this.evaluate();
 					this.drawBoard();
 					this.resetRawBoard();
-					this.syncBoard();
+				}
+				else{
+					var found = false;
+					if (this.currQueen == -1 )
+						this.currQueen = 0;
+					let step =  this.currQueen + num_step;
+					for (var i = this.currQueen; i < step && !found && i < this.size; i++) {
+						this.currQueen = i;
+						let cur_row = this.queenArr[i];
+						for (var j = 0; j < this.size && !found; j++){
+							if (j == cur_row) continue;
+							var new_board = this.makeMove(i, j);
+							let heur_score = this.getHeuristic(new_board);
+							this.rawBoardArr[j][i] = heur_score;
+							this.boardArr[j][i].heurVal = heur_score;
+							console.log('col '+i+' row '+j+' heur '+this.boardArr[j][i].heurVal);
+						}
+					}
+					this.currQueen++;
+					if (this.currQueen == this.size){
+						this.evaluate();
+						this.drawBoard();
+						this.resetRawBoard();
+						this.syncBoard();
+					}
 				}
 			}
 		},
@@ -217,14 +219,21 @@ Method
 			}
 			if (minHeur == this.heurToBeat){
 				this.initBoard();
-				console.log('Random move');
+				appendlog(">Random Restart karena nilai heuristik sekarang tidak lebih kecil daripada herustik sebelumnya");
 			}
 			else{
+				var x = this.queenArr[minCol];
+				var id = x.toString() + minCol.toString();
+				$("#"+id).css("background-color","yellow");
 				this.queenArr[minCol] = minRow;
 				this.heurToBeat = minHeur;
 				console.log('Move queen '+minCol+' heur '+minHeur);
+				appendlog(">Pindah queen pada kolom: " +minCol +" dari row : "+x+" ke "+minRow);
 				this.resetRawBoard();
 				this.currQueen = -1;
+				x = this.queenArr[minCol];
+				id = x.toString() + minCol.toString();
+				$("#"+id).css("background-color","green");
 				if (minHeur == 0)
 					alert('FINISH GAN');
 			}
@@ -339,6 +348,28 @@ function getinput(flag){
 	$(".main-object").css("width",obj_size);
 	$(".main-object").css("height",obj_size);
 }
+
+function resetwarna(){
+		var n=chessBoard.size;
+		var flag1=0;
+		for (var i = 0; i < n; i++) {
+			if (i%2==0) flag1=0;
+			else flag1=1;
+			for (var j =0 ; j< n ; ++j){
+				var id=i.toString() + j.toString();
+				id=id.toString();
+				if (flag1%2==0){
+					$("#"+id).css("background-color","#ffef96");
+				}
+				else{
+					$("#"+id).css("background-color","#bc5a45");
+				}
+				++flag1;
+
+			}
+		}
+}
+
 $( "#stop-btn" ).bind( "click", function() {
 	// alert('STOP');
 	chessBoard.keepRun = false;
@@ -348,13 +379,15 @@ $( "#fastforward-btn" ).bind( "click", function() {
 	// alert('runloop');
  	chessBoard.runLoop();
 });
-$( "#kolom-btn" ).bind( "click", function() {
-	// alert('runstep');
-	chessBoard.run(1);
-}); 
+// $( "#kolom-btn" ).bind( "click", function() {
+// 	// alert('runstep');
+// 	resetwarna();
+// 	chessBoard.run(1);
+// }); 
 	
 $( "#semua-btn" ).bind( "click", function() {
 	// alert('runboard');
+	resetwarna();
 	chessBoard.run(chessBoard.size);
 });
 
@@ -368,20 +401,10 @@ window.onresize = function(event) {
 	chessBoard.drawBoard();
 };
 
-function appendlog(heuristic,top){ //edit parameter sesuai kebutuhan mu boy
-/*			var temp[1000];
-	var stack[1000];
-	var i=top;
-	var j=0;
-	while(i>=0){
-		temp[j++]=stack[i--]
-	}
-	j--;
-	stack[0]=heuristic;
-	while(j>=0){
-		stack[i++]=temp[j--];
-	}
-	for (var a=0 ; a<i ; ++a){
-		$("#log-container").append(stack[a]);
-	}*/
+function appendlog(str){ //edit parameter sesuai kebutuhan mu boy
+	var p = "<p>"+str+"</p>";
+	var temp= $("#log-container").html();
+	$("#log-container").children("p").remove();
+	$("#log-container").append(p);
+	$("#log-container").append(temp);
 }
