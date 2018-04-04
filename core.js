@@ -28,8 +28,8 @@ Method
 - ‎run (move count, makemove, getheur, show heur 1 queen, select n mark min, from all choose best, update queen pos) based on algo
 - ‎draw line graph*/
 
-$(document).ready( function(){
-	var lineGraph = document.getElementById("line-canvas");
+// $(document).ready( function(){
+	// var lineGraph = document.getElementById("line-canvas");
 
 	function Petak(elem, type){
 		this.elem = elem; //getElementById per button
@@ -38,35 +38,39 @@ $(document).ready( function(){
 		
 		this.draw = function(){
 			if (type == "queen"){
-				this.elem.style.background-image = url("queen.png");
-				this.elem.innerHTML="";
+				// this.elem.style.backgroundImage = "url('queen.png')";
+				this.elem.innerHTML=" ";
 			}
 			else {
-				this.elem.style.background-image = "";
-				this.elem.innerHTML= this.heurVal;
+				// this.elem.style.backgroundImage = "";
+				this.elem.innerHTML= this.heurVal.toString();
 			}
 		}
 	}
 
 	var chessBoard = {
-		mode : document.getElementById("input-select").value,
-		size : parseInt(document.getElementById("input-n").value),
+		mode : undefined,
+		size : undefined,
 		stepCount : 1,
-		queenArr : [],
-		boardArr : [],
-		rawBoardArr : [],
-		heurHist : [],
+		queenArr : undefined,	//posisi queen, 1-D arr
+		boardArr : undefined,	//element button
+		rawBoardArr : undefined,	//arr angka simpan heuristic value 1 board
+		heurHist : undefined,	//rekap heuristic untuk diplot
 		currQueen : -1,
-		currRow : -1,
+		heurToBeat : 1000000,
 		initBoard : function(){ //asumsi mode random, belum ada terima inputan posisi queen
+			this.mode = document.getElementById("input-select").value;
+			this.size = parseInt(document.getElementById("input-n").value);
 			//init queen position for each column
+			this.queenArr = [];
 			for (var i = 0; i < this.size; i++) {
-				let col = Math.floor(Math.random() * this.size);
-				queenArr.push(col);
-				console.log('Place Queen at row '+i+' col '+col);
+				let row = Math.floor(Math.random() * this.size);
+				this.queenArr.push(row);
+				console.log('Place Queen at col '+i+' row '+row);
 			}
 
 			//init rawBoardArr
+			this.rawBoardArr = [];
 			for (var i = 0; i < this.size; i++) {
 				this.rawBoardArr.push([]);
 				for(var j = 0; j < this.size; j++){
@@ -76,17 +80,24 @@ $(document).ready( function(){
 			}
 
 			//load button to arr
+			this.boardArr = [];
 			for (var i = 0; i < this.size; i++) {
-				boardArr.push([]);
+				this.boardArr.push([]);
 				for (var j = 0; j < this.size; j++){
 					let tempID = i.toString() + j.toString();
 					let temp = document.getElementById(tempID);
 					let obj = undefined;
-					if (queenArr[j] == i) obj = new Petak(temp, "queen");
-					else obj = new Petak(temp, "empty");
-					boardArr[i].push(obj);
+					if (this.queenArr[j] == i) 
+						obj = new Petak(temp, "queen");
+					else 
+						obj = new Petak(temp, "empty");
+					this.boardArr[i].push(obj);
 				}
 			}
+
+			this.heurHist = [];
+			this.currQueen = -1;
+			this.heurToBeat = 1000000;
 		},
 		syncBoard : function(){
 			for (var i = 0; i < this.size; i++) {
@@ -103,45 +114,132 @@ $(document).ready( function(){
 		resetRawBoard : function(){
 			for (var i = 0; i < this.size; i++) {
 				for (var j = 0; j < this.size; j++) {
-					if (this.queenArr[j] = i)
+					if (this.queenArr[j] == i)
 						this.rawBoardArr[i][j] = -2;
 					else this.rawBoardArr[i][j] = -1;
 
 				}
 			}
-		}
-		checkRow : function(pos_c){
+		},
+		checkRow : function(temp_queen, pos_c){
 			let res = 0;
 			for (var i = 0; i < this.size; i++){
 				if (i == pos_c) continue;
-				if (this.queenArr[pos_c] == this.queenArr[i])
+				if (temp_queen[pos_c] == temp_queen[i])
 					res++;
 			}
 			return res;
 		},
-		checkDia : function(pos_c){
+		checkDia : function(temp_queen, pos_c){
 			let res = 0;
 			for(var i = 0; i < this.size; i++){
 				if (i == pos_c) continue;
 				let offset = pos_c - i;
-				if (this.queenArr[pos_c] == this.queenArr[i] - offset || 
-					this.queenArr[pos_c] == this.queenArr[i] + offset)
+				if (temp_queen[pos_c] == temp_queen[i] - offset || 
+					temp_queen[pos_c] == temp_queen[i] + offset)
 					res++;
 			}
 			return res;
 		},
-		getHeuristic : function(cek_board){
+		getHeuristic : function(temp_queen){
 			let res = 0;
 			for (var i = 0; i < this.size; i++) {
-				res += this.checkRow(i);
-				res += this.checkDia(i);
+				res += this.checkRow(temp_queen, i);
+				res += this.checkDia(temp_queen, i);
 			}
 			res = Math.floor(res/2);
 			return res;
 		},
-		makeMove : function(old_c, old_r, new_r){
-			var temp_board = this.rawBoardArr.slice();
-			
+		makeMove : function(old_c, new_r){
+			var temp_board = this.queenArr.slice();
+			temp_board[old_c] = new_r;
+			return temp_board;
+		},
+		run : function(num_step){
+			if (this.currQueen == this.size){
+				this.evaluate();
+				this.resetRawBoard();
+				this.syncBoard();
+			}
+			else{
+				var found = false;
+				if (this.currQueen == -1 )
+					this.currQueen = 0;
+				let step =  this.currQueen + num_step;
+				for (var i = this.currQueen; i < step && !found; i++) {
+					// console.log('Check on col '+i);
+					this.currQueen = i;
+					let cur_row = this.queenArr[i];
+					for (var j = 0; j < this.size && !found; j++){
+						if (j == cur_row) continue;
+						// console.log('Run row '+j);
+						var new_board = this.makeMove(i, j);
+						let heur_score = this.getHeuristic(new_board);
+						this.rawBoardArr[j][i] = heur_score;
+						// if (heur_score >=0 &&  heur_score < this.heurToBeat){
+						// 	console.log(this.rawBoardArr);
+						// 	this.queenArr[i] = j;
+						// 	this.resetRawBoard();
+						// 	this.syncBoard();
+						// 	this.currQueen = -1;
+						// 	found = true;
+						// 	this.heurToBeat = heur_score;
+						// }
+					}
+				}
+				this.currQueen++;
+				if (this.currQueen == this.size){
+					this.evaluate();
+					this.resetRawBoard();
+					this.syncBoard();
+				}
+				// if (!found){
+				// 	// let col_r = Math.floor(Math.random() * this.size);
+				// 	// let row_r = Math.floor(Math.random() * this.size);
+				// 	// this.heurToBeat = this.getHeuristic(this.makeMove(col_r, row_r));
+				// 	// this.queenArr[col_r] = row_r;
+				// 	this.initBoard();
+				// 	console.log('Random move');
+				// }
+				// this.resetRawBoard();
+				// this.syncBoard();
+				// this.currQueen = -1;
+				// console.log(this.heurToBeat);
+				// console.log(this.rawBoardArr);
+				// console.log(this.queenArr);
+				// this.heurHist.push(this.heurToBeat);
+			}
+		},
+		evaluate : function(){
+			console.log(this.queenArr);
+			console.log(this.heurToBeat);
+			console.log(this.rawBoardArr);
+			let minRow = -1;
+			let minCol = -1;
+			let minHeur = 1000000;
+			for (var i = 0; i < this.size; i++) {
+				for (var j = 0; j < this.size; j++) {
+					if (this.queenArr[j] != i && this.rawBoardArr[i][j] < minHeur){
+						minRow = i;
+						minCol = j;
+						minHeur = this.rawBoardArr[i][j];
+					}
+				}
+			}
+			if (minHeur == this.heurToBeat){
+				this.initBoard();
+				console.log('Random move');
+			}
+			else{
+				this.queenArr[minCol] = minRow;
+				this.heurToBeat = minHeur;
+				console.log('Move queen '+minCol+' heur '+minHeur);
+				this.resetRawBoard();
+				this.syncBoard();
+				this.currQueen = -1;
+				if (minHeur == 0)
+					alert('FINISH GAN');
+			}
 		}
 	}
-});
+// });
