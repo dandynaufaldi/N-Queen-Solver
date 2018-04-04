@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<style type="text/css">
+		.container{
+			float: left;
+		}
+
+		.container-gone{
+			display:none;
+		}
+
+		#form-container{
+			box-sizing: border-box;
+			width: 30%;
+			height: 50%;
+			margin-left: 35%;
+			margin-top: 20%;
+		}
+
+		.inputan{
+			width: 29%;
+			float: right;
+			margin: 0;
+		}
+
+		#input-select{
+			width: 30%;
+		}
+
+		#input-submit{
+			margin-top: 10%;
+			margin-left: : 30.5%;
+		}
+
+		.main-object{
+			width: 10%;
+			margin: 0;
+			color: white;
+			background-image: url("kuin.png");
+			background-size: 50%;
+			background-repeat: no-repeat;
+			background-position: center;
+		}
+
+		#button-container{
+			background-color: grey;
+			width: 10px;
+			margin-left: 10px;
+			margin: 0;
+		}
+
+		#btn-log-container{
+			display: none;
+			box-sizing: border-box;
+		}
+
+		.btn-on-heu{
+			width: 49%;
+			margin: 0;
+			height: 5%;
+		}
+
+		#kolom-btn{
+			margin-left: 0.1%;
+		}
+
+		#log-container{
+			margin-top: 2%;
+			box-sizing: border-box;
+			height: 90%;
+			width: 100%;
+			background-color: white;
+			overflow: scroll;
+		}
+
+	</style>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+</head>
+<body>
+	<div class="container" id="form-container" style="display: block;">
+		<form action="" method="GET" id="form-content">
+			<label for="queens">Input N</label>
+			<input class="inputan" id="input-n" type="text" name="queens" placeholder="">
+			<br><br>
+			<label for="option">Mode peletakkan queen</label>
+			<select id="input-select" class="inputan" name="option">
+				<option value="random">
+					Random
+				</option>
+				<option value="manual">
+					Manual
+				</option>
+			</select>
+			<button class="inputan" id="input-submit" onclick="getinput()">Submit</button>
+		</form>
+	</div>
+	<div class="container" id="button-container">
+		
+	</div>
+
+	<div class="container" id="btn-log-container">
+		<button class="btn-on-heu btn-on-heu-1" id="stop-btn" onclick="Stop"></button>
+		<button class="btn-on-heu btn-on-heu-1" id="fastforward-btn" onclick="">Fast Forward</button>
+		<button class="btn-on-heu" id="kolom-btn" id="kolom-btn" onclick="">Per kolom</button>
+		<button class="btn-on-heu" id="all-btn" id="semua-btn" onclick="">Semua kolom</button>
+		<div class="container" id="log-container">
+asojdasjdsajdiojasio;djaisojdioasjiodjasiojdais;jdi;sajdio;jsai;djia;osjdio;sajdio;jasiodjsaijd;iasjd;iojsa;idojasd
+			asdijasoidjaiosjdioasjdoiasdjasiojdsajidojasiojdaisojdiosjaiojdioasjiodjasoijdioasjidojasoijdoajisjdsoijasiojdjsajodisja
+		asdioasjdiojasoijdoiasjdoijasodjsaijdiojasiojdoijqpojdoipsajopidjoaismcodisaoipdcaiopsdoimacsoidjqpoimcopiqjmdiojqsoicmdopqisjmcdoijqspiomdcqopisjmcdioqjsmcoipjqsiopmqcsoijmdoiqcopiqjcqjmdocijqopijmcdoqijc
+		asojdasjdsajdiojasio;djaisojdioasjiodjasiojdais;jdi;sajdio;jsai;djia;osjdio;sajdio;jasiodjsaijd;iasjd;iojsa;idojasd
+			asdijasoidjaiosjdioasjdoiasdjasiojdsajidojasiojdaisojdiosjaiojdioasjiodjasoijdioasjidojasoijdoajisjdsoijasiojdjsajodisja
+		asdioasjdiojasoijdoiasjdoijasodjsaijdiojasiojdoijqpojdoipsajopidjoaismcodisaoipdcaiopsdoimacsoidjqpoimcopiqjmdiojqsoicmdopqisjmcdoijqspiomdcqopisjmcdioqjsmcoipjqsiopmqcsoijmdoiqcopiqjcqjmdocijqopijmcdoqijc
+		asojdasjdsajdiojasio;djaisojdioasjiodjasiojdais;jdi;sajdio;jsai;djia;osjdio;sajdio;jasiodjsaijd;iasjd;iojsa;idojasd
+			asdijasoidjaiosjdioasjdoiasdjasiojdsajidojasiojdaisojdiosjaiojdioasjiodjasoijdioasjidojasoijdoajisjdsoijasiojdjsajodisja
+		asdioasjdiojasoijdoiasjdoijasodjsaijdiojasiojdoijqpojdoipsajopidjoaismcodisaoipdcaiopsdoimacsoidjqpoimcopiqjmdiojqsoicmdopqisjmcdoijqspiomdcqopisjmcdioqjsmcoipjqsiopmqcsoijmdoiqcopiqjcqjmdocijqopijmcdoqijc
+		asojdasjdsajdiojasio;djaisojdioasjiodjasiojdais;jdi;sajdio;jsai;djia;osjdio;sajdio;jasiodjsaijd;iasjd;iojsa;idojasd
+			asdijasoidjaiosjdioasjdoiasdjasiojdsajidojasiojdaisojdiosjaiojdioasjiodjasoijdioasjidojasoijdoajisjdsoijasiojdjsajodisja
+		asdioasjdiojasoijdoiasjdoijasodjsaijdiojasiojdoijqpojdoipsajopidjoaismcodisaoipdcaiopsdoimacsoidjqpoimcopiqjmdiojqsoicmdopqisjmcdoijqspiomdcqopisjmcdioqjsmcoipjqsiopmqcsoijmdoiqcopiqjcqjmdocijqopijmcdoqijc
+		asojdasjdsajdiojasio;djaisojdioasjiodjasiojdais;jdi;sajdio;jsai;djia;osjdio;sajdio;jasiodjsaijd;iasjd;iojsa;idojasd
+			asdijasoidjaiosjdioasjdoiasdjasiojdsajidojasiojdaisojdiosjaiojdioasjiodjasoijdioasjidojasoijdoajisjdsoijasiojdjsajodisja
+		asdioasjdiojasoijdoiasjdoijasodjsaijdiojasiojdoijqpojdoipsajopidjoaismcodisaoipdcaiopsdoimacsoidjqpoimcopiqjmdiojqsoicmdopqisjmcdoijqspiomdcqopisjmcdioqjsmcoipjqsiopmqcsoijmdoiqcopiqjcqjmdocijqopijmcdoqijc
+		asojdasjdsajdiojasio;djaisojdioasjiodjasiojdais;jdi;sajdio;jsai;djia;osjdio;sajdio;jasiodjsaijd;iasjd;iojsa;idojasd
+			asdijasoidjaiosjdioasjdoiasdjasiojdsajidojasiojdaisojdiosjaiojdioasjiodjasoijdioasjidojasoijdoajisjdsoijasiojdjsajodisja
+		asdioasjdiojasoijdoiasjdoijasodjsaijdiojasiojdoijqpojdoipsajopidjoaismcodisaoipdcaiopsdoimacsoidjqpoimcopiqjmdiojqsoicmdopqisjmcdoijqspiomdcqopisjmcdioqjsmcoipjqsiopmqcsoijmdoiqcopiqjcqjmdocijqopijmcdoqijc
+		asojdasjdsajdiojasio;djaisojdioasjiodjasiojdais;jdi;sajdio;jsai;djia;osjdio;sajdio;jasiodjsaijd;iasjd;iojsa;idojasd
+			asdijasoidjaiosjdioasjdoiasdjasiojdsajidojasiojdaisojdiosjaiojdioasjiodjasoijdioasjidojasoijdoajisjdsoijasiojdjsajodisja
+		asdioasjdiojasoijdoiasjdoijasodjsaijdiojasiojdoijqpojdoipsajopidjoaismcodisaoipdcaiopsdoimacsoidjqpoimcopiqjmdiojqsoicmdopqisjmcdoijqspiomdcqopisjmcdioqjsmcoipjqsiopmqcsoijmdoiqcopiqjcqjmdocijqopijmcdoqijc
+		asojdasjdsajdiojasio;djaisojdioasjiodjasiojdais;jdi;sajdio;jsai;djia;osjdio;sajdio;jasiodjsaijd;iasjd;iojsa;idojasd
+			asdijasoidjaiosjdioasjdoiasdjasiojdsajidojasiojdaisojdiosjaiojdioasjiodjasoijdioasjidojasoijdoajisjdsoijasiojdjsajodisja
+		asdioasjdiojasoijdoiasjdoijasodjsaijdiojasiojdoijqpojdoipsajopidjoaismcodisaoipdcaiopsdoimacsoidjqpoimcopiqjmdiojqsoicmdopqisjmcdoijqspiomdcqopisjmcdioqjsmcoipjqsiopmqcsoijmdoiqcopiqjcqjmdocijqopijmcdoqijc
+		asojdasjdsajdiojasio;djaisojdioasjiodjasiojdais;jdi;sajdio;jsai;djia;osjdio;sajdio;jasiodjsaijd;iasjd;iojsa;idojasd
+			asdijasoidjaiosjdioasjdoiasdjasiojdsajidojasiojdaisojdiosjaiojdioasjiodjasoijdioasjidojasoijdoajisjdsoijasiojdjsajodisja
+		asdioasjdiojasoijdoiasjdoijasodjsaijdiojasiojdoijqpojdoipsajopidjoaismcodisaoipdcaiopsdoimacsoidjqpoimcopiqjmdiojqsoicmdopqisjmcdoijqspiomdcqopisjmcdioqjsmcoipjqsiopmqcsoijmdoiqcopiqjcqjmdocijqopijmcdoqijc
+		asdioasjdiojasoijdoiasjdoijasodjsaijdiojasiojdoijqpojdoipsajopidjoaismcodisaoipdcaiopsdoimacsoidjqpoimcopiqjmdiojqsoicmdopqisjmcdoijqspiomdcqopisjmcdioqjsmcoipjqsiopmqcsoijmdoiqcopiqjcqjmdocijqopijmcdoqijc
+		asojdasjdsajdiojasio;djaisojdioasjiodjasiojdais;jdi;sajdio;jsai;djia;osjdio;sajdio;jasiodjsaijd;iasjd;iojsa;idojasd
+			asdijasoidjaiosjdioasjdoiasdjasiojdsajidojasiojdaisojdiosjaiojdioasjiodjasoijdioasjidojasoijdoajisjdsoijasiojdjsajodisja
+		asdioasjdiojasoijdoiasjdoijasodjsaijdiojasiojdoijqpojdoipsajopidjoaismcodisaoipdcaiopsdoimacsoidjqpoimcopiqjmdiojqsoicmdopqisjmcdoijqspiomdcqopisjmcdioqjsmcoipjqsiopmqcsoijmdoiqcopiqjcqjmdocijqopijmcdoqijc
+		asojdasjdsajdiojasio;djaisojdioasjiodjasiojdais;jdi;sajdio;jsai;djia;osjdio;sajdio;jasiodjsaijd;iasjd;iojsa;idojasd
+			asdijasoidjaiosjdioasjdoiasdjasiojdsajidojasiojdaisojdiosjaiojdioasjiodjasoijdioasjidojasoijdoajisjdsoijasiojdjsajodisja
+		asdioasjdiojasoijdoiasjdoijasodjsaijdiojasiojdoijqpojdoipsajopidjoaismcodisaoipdcaiopsdoimacsoidjqpoimcopiqjmdiojqsoicmdopqisjmcdoijqspiomdcqopisjmcdioqjsmcoipjqsiopmqcsoijmdoiqcopiqjcqjmdocijqopijmcdoqijc
+		asojdasjdsajdiojasio;djaisojdioasjiodjasiojdais;jdi;sajdio;jsai;djia;osjdio;sajdio;jasiodjsaijd;iasjd;iojsa;idojasd
+			asdijasoidjaiosjdioasjdoiasdjasiojdsajidojasiojdaisojdiosjaiojdioasjiodjasoijdioasjidojasoijdoajisjdsoijasiojdjsajodisja
+		asdioasjdiojasoijdoiasjdoijasodjsaijdiojasiojdoijqpojdoipsajopidjoaismcodisaoipdcaiopsdoimacsoidjqpoimcopiqjmdiojqsoicmdopqisjmcdoijqspiomdcqopisjmcdioqjsmcoipjqsiopmqcsoijmdoiqcopiqjcqjmdocijqopijmcdoqijc
+		asojdasjdsajdiojasio;djaisojdioasjiodjasiojdais;jdi;sajdio;jsai;djia;osjdio;sajdio;jasiodjsaijd;iasjd;iojsa;idojasd
+			asdijasoidjaiosjdioasjdoiasdjasiojdsajidojasiojdaisojdiosjaiojdioasjiodjasoijdioasjidojasoijdoajisjdsoijasiojdjsajodisja
+		asdioasjdiojasoijdoiasjdoijasodjsaijdiojasiojdoijqpojdoipsajopidjoaismcodisaoipdcaiopsdoimacsoidjqpoimcopiqjmdiojqsoicmdopqisjmcdoijqspiomdcqopisjmcdioqjsmcoipjqsiopmqcsoijmdoiqcopiqjcqjmdocijqopijmcdoqijc
+		asojdasjdsajdiojasio;djaisojdioasjiodjasiojdais;jdi;sajdio;jsai;djia;osjdio;sajdio;jasiodjsaijd;iasjd;iojsa;idojasd
+			asdijasoidjaiosjdioasjdoiasdjasiojdsajidojasiojdaisojdiosjaiojdioasjiodjasoijdioasjidojasoijdoajisjdsoijasiojdjsajodisja
+		asdioasjdiojasoijdoiasjdoijasodjsaijdiojasiojdoijqpojdoipsajopidjoaismcodisaoipdcaiopsdoimacsoidjqpoimcopiqjmdiojqsoicmdopqisjmcdoijqspiomdcqopisjmcdioqjsmcoipjqsiopmqcsoijmdoiqcopiqjcqjmdocijqopijmcdoqijc
+		asojdasjdsajdiojasio;djaisojdioasjiodjasiojdais;jdi;sajdio;jsai;djia;osjdio;sajdio;jasiodjsaijd;iasjd;iojsa;idojasd
+			asdijasoidjaiosjdioasjdoiasdjasiojdsajidojasiojdaisojdiosjaiojdioasjiodjasoijdioasjidojasoijdoajisjdsoijasiojdjsajodisja
+		asdioasjdiojasoijdoiasjdoijasodjsaijdiojasiojdoijqpojdoipsajopidjoaismcodisaoipdcaiopsdoimacsoidjqpoimcopiqjmdiojqsoicmdopqisjmcdoijqspiomdcqopisjmcdioqjsmcoipjqsiopmqcsoijmdoiqcopiqjcqjmdocijqopijmcdoqijc
+		asojdasjdsajdiojasio;djaisojdioasjiodjasiojdais;jdi;sajdio;jsai;djia;osjdio;sajdio;jasiodjsaijd;iasjd;iojsa;idojasd
+			asdijasoidjaiosjdioasjdoiasdjasiojdsajidojasiojdaisojdiosjaiojdioasjiodjasoijdioasjidojasoijdoajisjdsoijasiojdjsajodisja
+		asdioasjdiojasoijdoiasjdoijasodjsaijdiojasiojdoijqpojdoipsajopidjoaismcodisaoipdcaiopsdoimacsoidjqpoimcopiqjmdiojqsoicmdopqisjmcdoijqspiomdcqopisjmcdioqjsmcoipjqsiopmqcsoijmdoiqcopiqjcqjmdocijqopijmcdoqijc
+		</div> <!--Adding log using appendlog() -->
+	</div>
+
+	<script type="text/javascript">
+		$('#form-container').submit(function() {
+			$(this).css("display","none");
+			return false;
+		});
+
+		function getmyidname(mine){
+			alert($(mine).attr('id'));
+
+		}
+
+		function getinput(){
+			var n;
+			var option;
+			n=document.getElementById("input-n").value;
+			n=parseInt(n);
+
+			$("#button-container").children("button").remove();
+			var flag1=0;
+			for (var i = 0; i < n; i++) {
+				if (i%2==0) flag1=0;
+				else flag1=1;
+				for (var j =0 ; j< n ; ++j){
+					var id="'"+i+j+"'";
+					var button="<button class='main-object' id="+id+" onclick='getmyidname(this)'></button>";
+					$("#button-container").append(button);
+					id=i.toString() + j.toString();
+					id=id.toString();
+					if (flag1%2==0){
+						$("#"+id).css("background-color","#ffef96");
+					}
+					else{
+						$("#"+id).css("background-color","#bc5a45");
+					}
+					++flag1;
+
+				}
+			}
+			var raw_height=($(window).height());
+			var raw_width=($(window).width());
+			var win_height=raw_height-20;
+			var win_width=raw_width-20;
+			var win_margin=0;
+			var flag=1;
+			
+			console.log(raw_height);			
+			console.log(raw_width);
+			console.log(win_height);			
+			console.log(win_width);
+
+			$(".btn-on-heu").css("margin-top","0");
+			if (win_height>=win_width){
+				//kalau H>W
+				win_margin=100*((win_height-win_width)/2)/raw_width;
+				win_height=win_width;
+				if ((win_width/win_height)>=0.5){
+					win_margin=100*((raw_width-win_width)/2)/raw_width;
+					$(".btn-on-heu-1").css("margin-top","3%");
+				}
+			}
+			else{
+				win_margin=100*((win_width-win_height)/2/raw_width);
+				flag=0;
+			}
+			var obj_size=win_height/n;
+			obj_size=(obj_size/win_height)*100;
+			
+			if(flag==1){
+				win_height=(win_width/raw_height)*100;
+				win_width=(win_width/raw_width)*100;
+			}
+			else{
+				win_width=(win_height/raw_width)*100;
+				win_height=(win_height/raw_height)*100;
+			}
+
+			win_width=win_width+"%";
+			win_height=win_height+"vh";
+			win_margin=win_margin+"%";
+
+			obj_size=obj_size+"%";
+
+			$("#button-container").css("width",win_width);
+			$("#button-container").css("height",win_height);
+			$("#button-container").css("margin-left","1%");
+			$("#btn-log-container").css("width",win_width);
+			$("#btn-log-container").css("height",win_height);
+			$("#btn-log-container").css("margin-left","1%");
+			$("#btn-log-container").css("display","block");
+			$(".main-object").css("width",obj_size);
+			$(".main-object").css("height",obj_size);
+		}
+
+		window.onresize = function(event) {
+    		getinput();
+		};
+
+		function appendlog(heuristic,top){ //edit parameter sesuai kebutuhan mu boy
+/*			var temp[1000];
+			var stack[1000];
+			var i=top;
+			var j=0;
+			while(i>=0){
+				temp[j++]=stack[i--]
+			}
+			j--;
+			stack[0]=heuristic;
+			while(j>=0){
+				stack[i++]=temp[j--];
+			}
+			for (var a=0 ; a<i ; ++a){
+				$("#log-container").append(stack[a]);
+			}*/
+		}
+
+	</script>
+</body>
+</html>
