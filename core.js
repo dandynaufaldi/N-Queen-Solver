@@ -76,12 +76,6 @@ function sleep(milliseconds) {
 			this.mode = document.getElementById("input-select").value;
 			this.size = parseInt(document.getElementById("input-n").value);
 			//init queen position for each column
-			if (typeof(this.queenArr) != "undefined"){
-				console.log('bersih2');
-				for (var i = this.queenArr.length - 1; i >= 0; i--) {
-					this.queenArr.splice(i,1);
-				}
-			}
 			this.queenArr = [];
 			for (var i = 0; i < this.size; i++) {
 				let row = Math.floor(Math.random() * this.size);
@@ -90,14 +84,6 @@ function sleep(milliseconds) {
 			}
 
 			//init rawBoardArr
-			if(typeof(this.rawBoardArr) != "undefined"){
-				console.log('bersih2');
-				for (var i = this.rawBoardArr.length - 1; i >= 0; i--) {
-					for (var i = this.rawBoardArr[i].length - 1; i >= 0; i--) {
-						this.rawBoardArr[i].splice(j,1);
-					}
-				}
-			}
 			this.rawBoardArr = [];
 			for (var i = 0; i < this.size; i++) {
 				this.rawBoardArr.push([]);
@@ -108,14 +94,6 @@ function sleep(milliseconds) {
 			}
 
 			//load button to arr
-			if (typeof(this.boardArr) != "undefined"){
-				console.log('bersih2');
-				for (var i = this.boardArr.length - 1; i >= 0; i--) {
-					for (var i = this.boardArr[i].length - 1; i >= 0; i--) {
-						this.rawBoardArr[i].splice(j,1);
-					}
-				}
-			}
 			this.boardArr = [];
 			for (var i = 0; i < this.size; i++) {
 				this.boardArr.push([]);
@@ -132,6 +110,38 @@ function sleep(milliseconds) {
 			}
 
 			this.heurHist = [];
+			this.currQueen = -1;
+			this.heurToBeat = 1000000;
+			this.keepRun = true;
+			this.drawBoard();
+		},
+		resetBoard : function(){
+			for (var i = 0; i < this.size; i++) {
+				let row = Math.floor(Math.random() * this.size);
+				this.queenArr[i] = row;
+				console.log('Place Queen at col '+i+' row '+row);
+			}
+			
+			for (var i = 0; i < this.size; i++) {
+				for(var j = 0; j < this.size; j++){
+					if (this.queenArr[j]==i) this.rawBoardArr[i][j] = -2;
+					else this.rawBoardArr[i][j] = -1;
+				}
+			}
+			
+			for (var i = 0; i < this.size; i++) {
+				for (var j = 0; j < this.size; j++){
+					if (this.queenArr[j] == i){
+						this.boardArr[i][j].type = "queen";
+						this.boardArr[i][j].heurVal = -2;
+					}
+					else{
+						this.boardArr[i][j].type = "empty";
+						this.boardArr[i][j].heurVal = -1;
+					}
+				}
+			}
+			
 			this.currQueen = -1;
 			this.heurToBeat = 1000000;
 			this.keepRun = true;
@@ -234,7 +244,7 @@ function sleep(milliseconds) {
 		evaluate : function(){
 			// sleep(200);
 			this.stepCount++;
-			if (this.stepCount % 20 == 0){
+			if (this.stepCount % 1000 == 0){
 				var x = confirm("Banyak step sudah mencapai "+this.stepCount+" .Tetap lanjut?");
 				if (x == false){
 					this.keepRun = false;
@@ -257,8 +267,8 @@ function sleep(milliseconds) {
 				}
 			}
 			if (minHeur == this.heurToBeat){
-				alert('Restarting');
-				this.initBoard();
+				// alert('Restarting');
+				this.resetBoard();
 				appendlog(">Random Restart karena nilai heuristik sekarang tidak lebih kecil daripada herustik sebelumnya");
 			}
 			else{
@@ -451,8 +461,14 @@ function appendlog(str){ //edit parameter sesuai kebutuhan mu boy
 		kelas='putih';
 	}
 	var p = "<div class='"+kelas+"'<p>"+str+"</p></div>";
-	var temp= $("#log-container").html();
-	$("#log-container").children("div").remove();
-	$("#log-container").append(p);
-	$("#log-container").append(temp);
+	// var temp= $("#log-container").html();
+	var temp = document.getElementById('log-container');
+	var isi = temp.innerHTML;
+	temp.innerHTML = "";
+	temp.innerHTML += p;
+	temp.innerHTML += isi;
+
+	// $("#log-container").children("div").remove();
+	// $("#log-container").append(p);
+	// $("#log-container").append(temp);
 }
